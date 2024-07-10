@@ -9,7 +9,7 @@ import copy
 
 # A partir de cuantos bytes deja de comparar contenido
 # y comienza a comprarar tamaños:
-DETALLE=8192 # DEPENDIENDO DEL SISTEMA, VALORES MENORES A 1024, 2048, 4096 O 8192 NO VALGAN LA PENA.
+DETALLE=8192 # DEPENDIENDO DEL SISTEMA, VALORES MENORES A 1024, 2048, 4096 O 8192 (o 65536 para MS EXCHANGE) NO VALGAN LA PENA.
 LOGFILE="duplilog.txt"
 
 ############      FIN DE VALORES EDITABLES    ################
