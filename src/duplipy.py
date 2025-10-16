@@ -1,4 +1,83 @@
-#!/usr/bin/python3
+#   Este programa busca recursivamente y loguea archivos duplicados.
+#   Copyright (C) 2024 Cristian Tocci
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#   Contacto : toccicristian@hotmail.com / toccicristian@protonmail.ch
+
+
+licencias = dict()
+licencias['gplv3'] = """    duplipy.py  Copyright (C) 2024  Cristian Tocci
+    This program comes with ABSOLUTELY NO WARRANTY; for details use -w argument.
+    This is free software, and you are welcome to redistribute it
+    under certain conditions; See COPYING.odt file for further details.
+"""
+licencias['gplv3logo'] = """
++----------------------------------------------------------------------------------------------------+
+|oooooooo+~~~+~~~~~~+~~~~~+~~~~+~~~~~~+~~~~+~~~~~~+~~+~~~~+~~~~~+~~~~+~~~~~~++~~+~~+~~~~~~:  ::::::~+|
+|oooooooo :::::::::::::::::::::::::::::::::::::::::::~::::::::::::::::::::::::::::::::. ~~~++ooooo+:.|
+|ooooooo~::::::~:::::::::::::::::::::::::::::::::::::+::::::::::::::::::::::::~~.~:~:~+oooooooooooo:.|
+|ooooooo :~:~~~~~~~~~~+~::: +~~~~~~~~~~~~~::++ :::::~+~:::::::::::::::::::~...~:::~ooooooooooooooo~.+|
+|oooooo~~:~oo~~~~~~~~~oo~:~+oo ~~~~~~.ooo.~oo+~::::.+o ::::::::::::::::~  .~::::+oo+~:   +ooooooo::+o|
+|oooooo::.+o+~::::::~+oo : oo~::::::::oo~:~oo~::::: oo~:::::::::::::: ~ ~::::.++~ ~:::::.+oooo+~ ~ooo|
+|ooooo+~:~oo~:::::::::::::~oo::::::::+oo :+oo~:::::~oo+.::::::::::.:~ ~:::::: .:::::::~~oooo+:~ +oooo|
+|ooooo::~+o+.:::::::::::: oo+~:::::: oo~~:oo~::::::~ooo~::::::::.~~.::::::::::::::::~~+oooooo+~::oooo|
+|oooo+~::oo~:::~:~:~~::::~oo~       ~oo::+oo.::::::~ooo+~::::: ~~.:::::::::::::::: ~+oooooooooo~~oooo|
+|oooo~::+oo :::~   +oo::.ooo~~~~~~~~~:.: oo+:::::::~oooo~:::~~+:::::::::::::::: ~+++~~~~oooooo+.~oooo|
+|ooo+.: oo~:::::::.oo+.:~oo~::::::::::::~oo:::::::::oooo+~::++~::::::::::::::~   .::::::ooooo~.~ooooo|
+|ooo~::~oo::::::::~oo~:~+o+~::::::::::: oo+~:::::::.+ooo~.~o+:::::::::::::::::::::::: +oooo+: +oooooo|
+|ooo.: oo+.~~~~~~ +oo.::oo~::::::::::::~oo~~~~~~~:::+oo~ +oo ::::::::::::::::::::.:~ooooo+: ~oooooooo|
+|oo~::.~~~~~~~~~~~~~ ::~+~.::::::::::::~+~~~~~~~~~:::o~ +ooo:::::::::::::::::: ~+oooooo~::~oooooooooo|
+|o+ :~   ~::::::::::::.  ~::::: ..:::::::::::::::::::~ ~oooo~~::::::::::~. ~~+oooooo+~::+oooooooooooo|
+|o~~:~~: ~ :~~. ~~.::~~~~. ::.~~~~::~:: :~~.~::~~ ::::.oooooo+~~::::~~~~ooooooooo+~::~+oooooooooooooo|
+|o::~~~~:::~~~ ~~~.:: ::~.~:~.~~~: ~~~ :~~~: ~~~~~:::: oooooooooooooooooooooo++~::~+ooooooooooooooooo|
+|+:::~::::::~~::::::::~~:::~::~:::::::::::~::::~:::::::~ooooooooooooooooo++~::~~+oooooooooooooooooooo|
+|::::::::::::::::::::::::::::::::::::::::::::::::::::::: ~oooooooooo+~~~::~~+oooooooooooooooooooooooo|
+|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~:~~~~~:    ::::::::~~~ooooooooooooooooooooooooooooo|
++----------------------------------------------------------------------------------------------------+
+"""
+licencias['textow'] = """ 
+    15. Disclaimer of Warranty.
+    THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY 
+    APPLICABLE LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT 
+    HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM “AS IS” WITHOUT 
+    WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT 
+    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A 
+    PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE 
+    OF THE PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU 
+    ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
+    
+    16. Limitation of Liability.
+    IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING 
+    WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR 
+    CONVEYS THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR 
+    DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL 
+    DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE PROGRAM 
+    (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING RENDERED 
+    INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A FAILURE OF 
+    THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS), EVEN IF SUCH HOLDER 
+    OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+    17. Interpretation of Sections 15 and 16.
+    If the disclaimer of warranty and limitation of liability provided above 
+    cannot be given local legal effect according to their terms, 
+    reviewing courts shall apply local law that most closely approximates 
+    an absolute waiver of all civil liability in connection with the Program, 
+    unless a warranty or assumption of liability accompanies a copy of 
+    the Program in return for a fee.
+    """
+
+
 
 from os.path import normpath, expanduser, isdir, isfile
 import os
@@ -15,6 +94,43 @@ DETALLE=20480
 LOGFILE="duplilog.txt"
 
 ############      FIN DE VALORES EDITABLES    ################
+
+ayuda=f"""
+    {sys.argv[0]}
+    Descripción: Busca y loguea archivos duplicados recursivamente.
+    Dado un tamaño (configurable en la variable DETALLE) compara los contenidos
+    de los archivos que superen ese tamaño, sino sólo compara el espacio que ocupan.
+
+    Es posible definir una serie de extensiones de nombres de archivo para que {sys.argv[0]}
+    indexe y compare sólo los archivos que posean esa extensión.
+
+    SINTAXIS:
+    {sys.argv[0]} directorio[{os.path.join('/','directorio2')}[...]][ .extension1[ .extension2 [ ...]]]
+
+    argumentos:
+        -h/--help/--ayuda       esta ayuda
+        -w                      disclaimer of warranty
+        -c                      copiright info
+        -g                      gplv3 ascii logo
+"""
+
+if len(sys.argv)>1:
+    for a in sys.argv[1:]:
+        if len([x for x in ["--help","-h","--ayuda"] if x == a.rstrip()])>0:
+            print(f"{ayuda}")
+            sys.exit()
+
+        if a.rstrip() == "-w":
+            print(licencias['textow'])
+            sys.exit()
+
+        if a.rstrip() == "-c":
+            print(licencias['gplv3'])
+            sys.exit()
+
+        if a.rstrip() == "-g":
+            print(licencias['gplv3logo'])
+            sys.exit()
 
 
 EXTENSIONES_PERMITIDAS=False
