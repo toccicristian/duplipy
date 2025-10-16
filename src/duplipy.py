@@ -16,6 +16,26 @@ LOGFILE="duplilog.txt"
 
 ############      FIN DE VALORES EDITABLES    ################
 
+ayuda=f"""
+    {sys.argv[0]}
+    Descripción: Busca y loguea archivos duplicados recursivamente.
+    Dado un tamaño (configurable en la variable DETALLE) compara los contenidos
+    de los archivos que superen ese tamaño, sino sólo compara el espacio que ocupan.
+
+    Es posible definir una serie de extensiones de nombres de archivo para que {sys.argv[0]}
+    indexe y compare sólo los archivos que posean esa extensión.
+
+    SINTAXIS:
+    {sys.argv[0]} directorio[{os.path.join('/','directorio2')}[...]][ .extension1[ .extension2 [ ...]]]
+
+"""
+
+if len(sys.argv)>1:
+    for a in sys.argv[1:]:
+        if len([x for x in ["--help","-h","--ayuda"] if x == a.rstrip()])>0:
+            print(f"{ayuda}")
+            sys.exit()
+
 
 EXTENSIONES_PERMITIDAS=False
 
